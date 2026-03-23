@@ -5,6 +5,7 @@ class TipSlider extends StatelessWidget {
     super.key,
     required double tipPercentage,
     required this.onChanged,
+    required int divisions,
   }) : _tipPercentage = tipPercentage;
 
   final double _tipPercentage;
@@ -16,6 +17,7 @@ class TipSlider extends StatelessWidget {
       min: 0.0,
       max: 0.5,
       value: _tipPercentage,
+      divisions: 5,
       onChanged: onChanged,
     );
   }

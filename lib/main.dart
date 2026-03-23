@@ -1,3 +1,5 @@
+import 'dart:nativewrappers/_internal/vm/lib/ffi_native_type_patch.dart';
+
 import 'package:flutter/material.dart';
 import 'package:utip/widgets/amount_field.dart';
 import 'package:utip/widgets/person_counter.dart';
@@ -30,7 +32,15 @@ class UTip extends StatefulWidget {
 class _UTipState extends State<UTip> {
   int _splitCount = 1;
   double _tipPercentage = 0.15;
-  var _billAmount = '0';
+  double _billAmount = 0;
+
+  double _finalAmount() {
+    return ((_billAmount * _tipPercentage) + _billAmount) / _splitCount;
+  }
+
+  double _totalTip() {
+    return (_billAmount * _tipPercentage);
+  }
 
   void _incrementSplit() {
     setState(() {
@@ -49,6 +59,8 @@ class _UTipState extends State<UTip> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    var totalPerPerson = _finalAmount();
+    var totalTip = _totalTip();
     final style = theme.textTheme.titleMedium!.copyWith(
       color: theme.colorScheme.onPrimary,
       fontWeight: FontWeight.bold,
@@ -70,7 +82,7 @@ class _UTipState extends State<UTip> {
                 children: [
                   Text('Total per Person', style: style),
                   Text(
-                    '\$$_billAmount',
+                    '\$$totalPerPerson',
                     style: style.copyWith(
                       fontSize: theme.textTheme.displaySmall?.fontSize,
                     ),
@@ -99,10 +111,10 @@ class _UTipState extends State<UTip> {
                         onChanged: (value) {
                           // Handle bill amount change
                           setState(() {
-                            _billAmount = value;
+                            _billAmount = double.parse(value);
                           });
                         },
-                        billAmount: '100',
+                        billAmount: '$_billAmount',
                       ),
 
                       Row(
@@ -123,7 +135,10 @@ class _UTipState extends State<UTip> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Tip', style: theme.textTheme.titleMedium),
-                          Text('\$15', style: theme.textTheme.titleMedium),
+                          Text(
+                            '\$$totalTip',
+                            style: theme.textTheme.titleMedium,
+                          ),
                         ],
                       ),
 
@@ -136,6 +151,7 @@ class _UTipState extends State<UTip> {
                             _tipPercentage = value;
                           });
                         },
+                        divisions: 5,
                       ),
                     ],
                   ),
