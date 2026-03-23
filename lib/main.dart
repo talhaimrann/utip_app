@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:utip/widgets/amount_field.dart';
 import 'package:utip/widgets/person_counter.dart';
 import 'package:utip/widgets/tip_slider.dart';
 
@@ -29,6 +30,7 @@ class UTip extends StatefulWidget {
 class _UTipState extends State<UTip> {
   int _splitCount = 1;
   double _tipPercentage = 0.15;
+  var _billAmount = '0';
 
   void _incrementSplit() {
     setState(() {
@@ -53,92 +55,95 @@ class _UTipState extends State<UTip> {
     );
     return Scaffold(
       appBar: AppBar(title: const Text('UTip')),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: theme.colorScheme.inversePrimary,
-              borderRadius: BorderRadius.circular(5),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: theme.colorScheme.inversePrimary,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              padding: const EdgeInsets.all(20),
+              margin: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Text('Total per Person', style: style),
+                  Text(
+                    '\$$_billAmount',
+                    style: style.copyWith(
+                      fontSize: theme.textTheme.displaySmall?.fontSize,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            padding: const EdgeInsets.all(20),
-            margin: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Text('Total per Person', style: style),
-                Text(
-                  '\$10',
-                  style: style.copyWith(
-                    fontSize: theme.textTheme.displaySmall?.fontSize,
+
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 100,
+                height: 300,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    color: theme.colorScheme.primary,
+                    width: 2,
                   ),
                 ),
-              ],
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              width: 100,
-              height: 300,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: theme.colorScheme.primary, width: 2),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Bill Amount',
-                        prefixIcon: Icon(Icons.attach_money),
-                        border: OutlineInputBorder(),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      BuildAmountField(
+                        onChanged: (value) {
+                          // Handle bill amount change
+                          setState(() {
+                            _billAmount = value;
+                          });
+                        },
+                        billAmount: '100',
                       ),
-                      onChanged: (value) {
-                        // Handle bill amount change
-                      },
-                    ),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Split', style: theme.textTheme.titleMedium),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Split', style: theme.textTheme.titleMedium),
 
-                        PersonCounter(
-                          theme: theme,
-                          splitCount: _splitCount,
-                          onIncrement: _incrementSplit,
-                          onDecrement: _decrementSplit,
-                        ),
-                      ],
-                    ),
+                          PersonCounter(
+                            theme: theme,
+                            splitCount: _splitCount,
+                            onIncrement: _incrementSplit,
+                            onDecrement: _decrementSplit,
+                          ),
+                        ],
+                      ),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Tip', style: theme.textTheme.titleMedium),
-                        Text('\$15', style: theme.textTheme.titleMedium),
-                      ],
-                    ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Tip', style: theme.textTheme.titleMedium),
+                          Text('\$15', style: theme.textTheme.titleMedium),
+                        ],
+                      ),
 
-                    Text('${(_tipPercentage * 100).round()}%'),
+                      Text('${(_tipPercentage * 100).round()}%'),
 
-                    TipSlider(
-                      tipPercentage: _tipPercentage,
-                      onChanged: (double value) {
-                        setState(() {
-                          _tipPercentage = value;
-                        });
-                      },
-                    ),
-                  ],
+                      TipSlider(
+                        tipPercentage: _tipPercentage,
+                        onChanged: (double value) {
+                          setState(() {
+                            _tipPercentage = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
