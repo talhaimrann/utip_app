@@ -40,7 +40,7 @@ class _UTipState extends State<UTip> {
           Container(
             decoration: BoxDecoration(
               color: theme.colorScheme.inversePrimary,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(5),
             ),
             padding: const EdgeInsets.all(20),
             margin: const EdgeInsets.all(10),
@@ -54,6 +54,36 @@ class _UTipState extends State<UTip> {
                   ),
                 ),
               ],
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: theme.colorScheme.primary, width: 2),
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Bill Amount',
+                        prefixIcon: Icon(Icons.attach_money),
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: (value) {
+                        // Handle bill amount change
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
