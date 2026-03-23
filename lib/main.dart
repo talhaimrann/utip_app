@@ -27,6 +27,11 @@ class UTip extends StatefulWidget {
 class _UTipState extends State<UTip> {
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    final style = theme.textTheme.titleMedium!.copyWith(
+      color: theme.colorScheme.onPrimary,
+      fontWeight: FontWeight.bold,
+    );
     return Scaffold(
       appBar: AppBar(title: const Text('UTip')),
       body: Column(
@@ -34,15 +39,20 @@ class _UTipState extends State<UTip> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.inversePrimary,
+              color: theme.colorScheme.inversePrimary,
               borderRadius: BorderRadius.circular(10),
             ),
             padding: const EdgeInsets.all(20),
             margin: const EdgeInsets.all(10),
             child: Column(
               children: [
-                const Text('Total per Person', style: TextStyle(fontSize: 18)),
-                Text('\$10', style: TextStyle(fontSize: 24)),
+                Text('Total per Person', style: style),
+                Text(
+                  '\$10',
+                  style: style.copyWith(
+                    fontSize: theme.textTheme.displaySmall?.fontSize,
+                  ),
+                ),
               ],
             ),
           ),
