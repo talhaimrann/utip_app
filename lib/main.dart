@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:utip/widgets/person_counter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,6 +27,7 @@ class UTip extends StatefulWidget {
 
 class _UTipState extends State<UTip> {
   int _splitCount = 1;
+  double _tipPercentage = 0.15;
 
   void _incrementSplit() {
     setState(() {
@@ -82,11 +84,11 @@ class _UTipState extends State<UTip> {
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(color: theme.colorScheme.primary, width: 2),
               ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: TextField(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    TextField(
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         labelText: 'Bill Amount',
@@ -97,61 +99,49 @@ class _UTipState extends State<UTip> {
                         // Handle bill amount change
                       },
                     ),
-                  ),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Split', style: theme.textTheme.titleMedium),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Split', style: theme.textTheme.titleMedium),
 
-                      PersonCounter(
-                        theme: theme,
-                        splitCount: _splitCount,
-                        onIncrement: _incrementSplit,
-                        onDecrement: _decrementSplit,
-                      ),
-                    ],
-                  ),
-                ],
+                        PersonCounter(
+                          theme: theme,
+                          splitCount: _splitCount,
+                          onIncrement: _incrementSplit,
+                          onDecrement: _decrementSplit,
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Tip', style: theme.textTheme.titleMedium),
+                        Text('\$15', style: theme.textTheme.titleMedium),
+                      ],
+                    ),
+
+                    Text('${(_tipPercentage * 100).round()}%'),
+
+                    Slider(
+                      min: 0.0,
+                      max: 0.5,
+                      value: _tipPercentage,
+                      onChanged: (value) {
+                        // Handle slider change
+                        setState(() {
+                          _tipPercentage = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class PersonCounter extends StatelessWidget {
-  const PersonCounter({
-    super.key,
-    required this.theme,
-    required int splitCount,
-    required this.onIncrement,
-    required this.onDecrement,
-  }) : _splitCount = splitCount;
-
-  final ThemeData theme;
-  final int _splitCount;
-  final VoidCallback onIncrement;
-  final VoidCallback onDecrement;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        IconButton(
-          onPressed: onIncrement,
-          icon: Icon(Icons.add),
-          color: theme.colorScheme.primary,
-        ),
-        Text(_splitCount.toString(), style: theme.textTheme.titleMedium),
-        IconButton(
-          onPressed: onDecrement,
-          icon: Icon(Icons.remove),
-          color: theme.colorScheme.primary,
-        ),
-      ],
     );
   }
 }
