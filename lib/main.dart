@@ -1,5 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/ffi_native_type_patch.dart';
-
 import 'package:flutter/material.dart';
 import 'package:utip/widgets/amount_field.dart';
 import 'package:utip/widgets/person_counter.dart';
@@ -31,7 +29,7 @@ class UTip extends StatefulWidget {
 
 class _UTipState extends State<UTip> {
   int _splitCount = 1;
-  double _tipPercentage = 0.15;
+  double _tipPercentage = 0.10;
   double _billAmount = 0;
 
   double _finalAmount() {
@@ -82,7 +80,7 @@ class _UTipState extends State<UTip> {
                 children: [
                   Text('Total per Person', style: style),
                   Text(
-                    '\$$totalPerPerson',
+                    '\$${totalPerPerson.toStringAsFixed(2)}',
                     style: style.copyWith(
                       fontSize: theme.textTheme.displaySmall?.fontSize,
                     ),
